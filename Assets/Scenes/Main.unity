@@ -1335,6 +1335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  lookSenstivity: 6
 --- !u!4 &1942211811
 Transform:
   m_ObjectHideFlags: 0

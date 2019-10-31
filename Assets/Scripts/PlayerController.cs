@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float speed;
+    public float lookSenstivity;
 
     private PlayerMotor motor;
 
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        // Calculate movement
         float xMove = Input.GetAxisRaw("Horizontal");
         float zMove = Input.GetAxisRaw("Vertical");
 
@@ -23,5 +25,20 @@ public class PlayerController : MonoBehaviour {
         Vector3 velocity = (horizontalMovement + verticalMovement).normalized * speed;
 
         motor.Move(velocity);
+
+        // Calculate player turning
+        float yRot = Input.GetAxisRaw("Mouse X");
+
+        Vector3 rotation = new Vector3(0f, yRot, 0f) * lookSenstivity;
+
+        motor.Rotate(rotation);
+
+        // Calculate camera rotation
+        float xRot = Input.GetAxisRaw("Mouse Y");
+
+        Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * lookSenstivity;
+
+        motor.RotateCamera(cameraRotation);
+
     }
 }
