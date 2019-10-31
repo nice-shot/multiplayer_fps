@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &292443506238771500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7387413269092561520}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7387413269092561520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 292443506238771500}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.55, y: -0.14999998, z: 1.0500001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6127515929321305799}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6127515927933801391
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,7 +60,7 @@ Transform:
   - {fileID: 6127515929451205632}
   - {fileID: 6127515927983302338}
   m_Father: {fileID: 6127515929321305799}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6127515927983302341
 GameObject:
@@ -43,7 +73,6 @@ GameObject:
   - component: {fileID: 6127515927983302338}
   - component: {fileID: 6127515927983302337}
   - component: {fileID: 6127515927983302336}
-  - component: {fileID: 6127515927983302339}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -111,20 +140,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &6127515927983302339
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6127515927983302341}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &6127515928892344761
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,6 +232,7 @@ GameObject:
   - component: {fileID: 6127515929034718442}
   - component: {fileID: 6127515929034718444}
   - component: {fileID: -2699164405217750564}
+  - component: {fileID: 7115934645300297482}
   - component: {fileID: 2762968802048238075}
   - component: {fileID: 645369745046423572}
   - component: {fileID: 2977468035349477032}
@@ -318,6 +334,21 @@ MonoBehaviour:
   - {fileID: 6127515929034718442}
   - {fileID: 6127515929321305797}
   - {fileID: 6127515929321305796}
+--- !u!114 &7115934645300297482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6127515929034718417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 715188a6356d7734f92ec073cbe4f1a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 3702088061345214277, guid: d8310c193fce2ae429637780fef3dbca,
+    type: 3}
+  bulletSpawn: {fileID: 7387413269092561520}
 --- !u!114 &2762968802048238075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +472,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.5, z: -0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 7387413269092561520}
   - {fileID: 6127515927933801388}
   m_Father: {fileID: 6127515929034718445}
   m_RootOrder: 1
@@ -507,7 +539,6 @@ GameObject:
   - component: {fileID: 6127515929451205632}
   - component: {fileID: 6127515929451205663}
   - component: {fileID: 6127515929451205662}
-  - component: {fileID: 6127515929451205633}
   m_Layer: 0
   m_Name: Handle
   m_TagString: Untagged
@@ -575,16 +606,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6127515929451205633
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6127515929451205635}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
