@@ -24,6 +24,7 @@ public class BulletController : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
+        print("Bullet hit: " + collision.other.name);
         Explode();
     }
 
