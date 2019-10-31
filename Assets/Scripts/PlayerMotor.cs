@@ -10,7 +10,10 @@ public class PlayerMotor : MonoBehaviour {
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
-    private Vector3 cameraRotation = Vector3.zero;
+    private float cameraRotationX = 0f;
+    private float currentCameraRotationX = 0f;
+
+    private const float CAMERA_ROTATION_LIMIT = 85f;
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -30,7 +33,15 @@ public class PlayerMotor : MonoBehaviour {
     private void PerformRotation() {
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
         if (cam != null) {
-            cam.transform.Rotate(-cameraRotation);
+            // Rotate camera and clamp it
+            currentCameraRotationX -= cameraRotationX;
+            currentCameraRotationX = Mathf.Clamp(
+                currentCameraRotationX,
+                -CAMERA_ROTATION_LIMIT,
+                CAMERA_ROTATION_LIMIT
+            );
+
+            cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
         }
     }
 
@@ -42,8 +53,8 @@ public class PlayerMotor : MonoBehaviour {
         this.rotation = rotation;
     }
 
-    public void RotateCamera(Vector3 rotation) {
-        cameraRotation = rotation;
+    public void RotateCamera(float rotationX) {
+        cameraRotationX = rotationX;
     }
 
 }
