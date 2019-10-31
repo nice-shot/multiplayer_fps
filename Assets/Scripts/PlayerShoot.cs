@@ -14,6 +14,11 @@ public class PlayerShoot : MonoBehaviour {
         animator = GetComponent<Animator>();
     }
 
+    void Start() {
+        // Adjust bulletSpawn to point to where the camera is pointing
+        bulletSpawn.LookAt(Camera.main.transform.forward * 5000f);
+    }
+
     void Update() {
         if (Input.GetButtonDown("Fire1")) {
             InitiateShoot();
