@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletController : MonoBehaviour {
+public class BulletController : NetworkBehaviour {
     public float initialSpeed;
     public float lifespan;
 
+    [SyncVar]
+    public int localId;
+    public Rigidbody rb;
+
     private float creationTime;
-    private Rigidbody rb;
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -33,5 +37,9 @@ public class BulletController : MonoBehaviour {
         Destroy(gameObject);
     }
 
+    override public void OnStartAuthority() {
+        print("I got authority for player: " + PlayerSetup.localPlayer);
+        PlayerSetup.localPlayer.GetComponent<PlayerShoot>().ReplaceLocalBulletWithNetwork(this);
+    }
 
 }
