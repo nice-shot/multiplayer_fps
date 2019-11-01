@@ -17,11 +17,6 @@ public class PlayerShoot : NetworkBehaviour {
         animator = GetComponent<Animator>();
     }
 
-    void Start() {
-        // Adjust bulletSpawn to point to where the camera is pointing
-        bulletSpawn.LookAt(Camera.main.transform.forward * 5f);
-    }
-
     void Update() {
         if (isLocalPlayer && Input.GetButtonDown("Fire1")) {
             print("Initiated shooting from player");
