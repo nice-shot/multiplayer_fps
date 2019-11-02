@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(Player))]
 public class PlayerSetup : NetworkBehaviour {
 
     public static PlayerSetup localPlayer;
@@ -25,14 +26,20 @@ public class PlayerSetup : NetworkBehaviour {
             }
         }
 
-        gameObject.name = "Player " + netId;
+        GameManager.instance.RegisterPlayer(netId.Value, GetComponent<Player>());
     }
+
+    // public override void OnStartClient() {
+        // base.OnStartClient();
+    // }
 
     void OnDisable() {
         if (sceneCamera != null) {
             sceneCamera.gameObject.SetActive(true);
             localPlayer = null;
         }
+
+        GameManager.instance.UnregisterPlayer(transform.name);
     }
 
 }
