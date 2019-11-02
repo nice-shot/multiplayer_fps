@@ -17,12 +17,10 @@ public class PlayerShoot : NetworkBehaviour {
         animator = GetComponent<Animator>();
     }
 
-    void Update() {
-        if (isLocalPlayer && Input.GetButtonDown("Fire1")) {
-            print("Initiated shooting from player");
-            roundtripTimer = Time.time;
-            CmdPlayerShoot();
-        }
+    public void StartShooting() {
+        print("Initiated shooting from player");
+        roundtripTimer = Time.time;
+        CmdPlayerShoot();
     }
 
     [Command]

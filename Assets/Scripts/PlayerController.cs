@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMotor))]
+[RequireComponent(typeof(PlayerMotor), typeof(PlayerShoot))]
 public class PlayerController : MonoBehaviour {
 
     public float speed;
     public float lookSenstivity;
 
     private PlayerMotor motor;
+    private PlayerShoot shooter;
 
     void Awake() {
         motor = GetComponent<PlayerMotor>();
+        shooter = GetComponent<PlayerShoot>();
     }
 
     void Update() {
@@ -40,5 +42,9 @@ public class PlayerController : MonoBehaviour {
 
         motor.RotateCamera(cameraRotation);
 
+        // Calculate shooting
+        if (Input.GetButtonDown("Fire1")) {
+            shooter.StartShooting();
+        }
     }
 }
