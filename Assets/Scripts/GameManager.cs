@@ -41,8 +41,9 @@ public class GameManager : MonoBehaviour {
 
     public void UnregisterPlayer(string playerId) {
         players.Remove(playerId);
-        Destroy(infoControllers[playerId].gameObject);
+        UIPlayerInfoController infoController = infoControllers[playerId];
         infoControllers.Remove(playerId);
+        Destroy(infoController.gameObject);
     }
 
     public Player GetPlayer(string playerId) {
