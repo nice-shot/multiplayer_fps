@@ -26,20 +26,44 @@ public class BulletController : NetworkBehaviour {
 
     void Update() {
         if (Time.time - creationTime > lifespan) {
+            ShowExplosion(transform.position, transform.rotation);
             Explode();
         }
     }
 
     void OnCollisionEnter(Collision collision) {
-        Explode();
-        if (isServer) {
+        // Local player sends the explosion announcement to everyone
+        if (hasAuthority) {
             print("Bullet hit: " + collision.other.name);
+            CmdAnnounceExplosion(transform.position, transform.rotation);
+            ShowExplosion(transform.position, transform.rotation);
         }
+        // if (isServer) {
+        //     Explode();
+        // }
+    }
+
+    [Command]
+    private void CmdAnnounceExplosion(Vector3 position, Quaternion rotation) {
+        print("Bullet exploded!");
+        RpcPlaceExplosion(position, rotation);
+        ShowExplosion(position, rotation);
+        Destroy(gameObject);
+    }
+
+    [ClientRpc]
+    private void RpcPlaceExplosion(Vector3 position, Quaternion rotation) {
+        if (!hasAuthority) {
+            ShowExplosion(position, rotation);
+        }
+        Destroy(gameObject);
+    }
+
+    private void ShowExplosion(Vector3 position, Quaternion rotation) {
+        Instantiate(explosionEffect, position, rotation);
     }
 
     private void Explode() {
-        print("Bullet exploded!");
-        Instantiate(explosionEffect, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 
