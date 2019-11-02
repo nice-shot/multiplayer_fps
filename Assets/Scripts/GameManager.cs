@@ -5,9 +5,7 @@ using UnityEngine.Networking;
 
 public class GameManager : MonoBehaviour {
 
-
-    // Server UI
-    public GameObject serverUIPanel;
+    // UI
     public Transform playerInfoList;
     public UIPlayerInfoController playerInfoControllerPrefab;
 
