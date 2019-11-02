@@ -8,15 +8,42 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public float lookSenstivity;
 
+    public PlayerUI playerUIPrefab;
+
     private PlayerMotor motor;
     private PlayerShoot shooter;
+    private PlayerUI ui;
+
+    private bool paused = false;
 
     void Awake() {
         motor = GetComponent<PlayerMotor>();
         shooter = GetComponent<PlayerShoot>();
     }
 
+    void Start() {
+        ui = Instantiate(playerUIPrefab);
+        Unpause();
+    }
+
+    void OnDisable() {
+        Destroy(ui.gameObject);
+    }
+
     void Update() {
+        if (Input.GetButtonDown("Cancel")) {
+            if (paused) {
+                Unpause();
+            } else {
+                Pause();
+                return;
+            }
+        }
+
+        if (paused) {
+            return;
+        }
+
         // Calculate movement
         float xMove = Input.GetAxisRaw("Horizontal");
         float zMove = Input.GetAxisRaw("Vertical");
@@ -46,5 +73,20 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetButtonDown("Fire1")) {
             shooter.StartShooting();
         }
+    }
+
+    private void Pause() {
+        paused = true;
+        Cursor.lockState = CursorLockMode.None;
+        ui.SetPauseMenu(true);
+        motor.Move(Vector3.zero);
+        motor.Rotate(Vector3.zero);
+        motor.RotateCamera(0f);
+    }
+
+    private void Unpause() {
+        paused = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        ui.SetPauseMenu(false);
     }
 }
