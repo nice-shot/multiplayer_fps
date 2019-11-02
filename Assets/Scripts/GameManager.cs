@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
             playerInfoList
         );
 
-        infoController.SetInfo(playerId, 5);
+        infoController.SetInfo(playerId, player.hitsTaken);
         infoControllers.Add(playerId, infoController);
     }
 
@@ -43,10 +43,22 @@ public class GameManager : MonoBehaviour {
         players.Remove(playerId);
         UIPlayerInfoController infoController = infoControllers[playerId];
         infoControllers.Remove(playerId);
-        Destroy(infoController.gameObject);
+        if (infoController != null) {
+            Destroy(infoController.gameObject);
+        }
     }
 
     public Player GetPlayer(string playerId) {
         return players[playerId];
+    }
+
+    public void UpdatePlayerStatus(string playerId, int hits) {
+        if (!players.ContainsKey(playerId)) {
+            // Probably not registered yet
+            return;
+        }
+        print("Manager updating player info - " + playerId);
+        Player player = GetPlayer(playerId);
+        infoControllers[playerId].SetInfo(playerId, hits);
     }
 }

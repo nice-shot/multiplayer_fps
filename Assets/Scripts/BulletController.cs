@@ -12,10 +12,12 @@ public class BulletController : NetworkBehaviour {
 
     [SyncVar]
     public int localId;
+
     [HideInInspector]
     public Rigidbody rb;
 
     private float creationTime;
+    private const string PLAYER_TAG = "Player";
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -32,12 +34,22 @@ public class BulletController : NetworkBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
-        // Local player sends the explosion announcement to everyone
+        // Local player sends the details to the server
         if (hasAuthority) {
-            print("Bullet hit: " + collision.other.name);
+            print("Bullet hit: " + collision.gameObject.name);
+            // Create explosion
             CmdAnnounceExplosion(transform.position, transform.rotation);
+
+            // Mark player hit
+            if (collision.gameObject.CompareTag(PLAYER_TAG)) {
+                print("Hit another player");
+                CmdHitPlayer(collision.gameObject.name);
+            }
+
+            // Play explosion for local player
             ShowExplosion(transform.position, transform.rotation);
         }
+
         // Maybe add double checking of collision on the server side
         // if (isServer) {
         // }
@@ -49,6 +61,16 @@ public class BulletController : NetworkBehaviour {
         RpcPlaceExplosion(position, rotation);
         ShowExplosion(position, rotation);
         Destroy(gameObject);
+    }
+
+    [Command]
+    private void CmdHitPlayer(string playerId) {
+        print("Another player was hit - marking it down");
+        Player player = GameManager.instance.GetPlayer(playerId);
+        print("Updating hits for player: " + player + " to" + (player.hitsTaken + 1));
+        player.hitsTaken += 1;
+        // The hook doesn't happen on the server so change apply this manually
+        player.OnChangeHits(player.hitsTaken);
     }
 
     [ClientRpc]
