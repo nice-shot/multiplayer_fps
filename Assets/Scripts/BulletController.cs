@@ -27,7 +27,7 @@ public class BulletController : NetworkBehaviour {
     void Update() {
         if (Time.time - creationTime > lifespan) {
             ShowExplosion(transform.position, transform.rotation);
-            Explode();
+            Destroy(gameObject);
         }
     }
 
@@ -61,10 +61,6 @@ public class BulletController : NetworkBehaviour {
 
     private void ShowExplosion(Vector3 position, Quaternion rotation) {
         Instantiate(explosionEffect, position, rotation);
-    }
-
-    private void Explode() {
-        Destroy(gameObject);
     }
 
     override public void OnStartAuthority() {
