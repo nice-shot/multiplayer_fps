@@ -27,7 +27,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     void OnDisable() {
-        Destroy(ui.gameObject);
+        if (ui != null) {
+            Destroy(ui.gameObject);
+        }
     }
 
     void Update() {
