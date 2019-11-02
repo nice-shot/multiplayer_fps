@@ -8,8 +8,11 @@ public class BulletController : NetworkBehaviour {
     public float initialSpeed;
     public float lifespan;
 
+    public GameObject explosionEffect;
+
     [SyncVar]
     public int localId;
+    [HideInInspector]
     public Rigidbody rb;
 
     private float creationTime;
@@ -28,12 +31,15 @@ public class BulletController : NetworkBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
-        print("Bullet hit: " + collision.other.name);
         Explode();
+        if (isServer) {
+            print("Bullet hit: " + collision.other.name);
+        }
     }
 
     private void Explode() {
         print("Bullet exploded!");
+        Instantiate(explosionEffect, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 

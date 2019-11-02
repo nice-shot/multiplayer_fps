@@ -142,6 +142,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSpeed: 20
   lifespan: 3
+  explosionEffect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1,
+    type: 3}
+  localId: 0
+  rb: {fileID: 0}
 --- !u!54 &3702088061345214329
 Rigidbody:
   m_ObjectHideFlags: 0
