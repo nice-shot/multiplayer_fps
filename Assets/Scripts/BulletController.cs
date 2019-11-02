@@ -38,8 +38,8 @@ public class BulletController : NetworkBehaviour {
             CmdAnnounceExplosion(transform.position, transform.rotation);
             ShowExplosion(transform.position, transform.rotation);
         }
+        // Maybe add double checking of collision on the server side
         // if (isServer) {
-        //     Explode();
         // }
     }
 
