@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour {
     private void Pause() {
         paused = true;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         ui.SetPauseMenu(true);
         motor.Move(Vector3.zero);
         motor.Rotate(Vector3.zero);
@@ -87,6 +88,7 @@ public class PlayerController : MonoBehaviour {
     private void Unpause() {
         paused = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         ui.SetPauseMenu(false);
     }
 }
