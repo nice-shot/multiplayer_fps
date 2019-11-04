@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Moves the player using Physics
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : MonoBehaviour {
 
@@ -31,10 +34,12 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     private void PerformRotation() {
+        // Rotate body
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
+        // Rotate camera
         if (cam != null) {
-            // Rotate camera and clamp it
             currentCameraRotationX -= cameraRotationX;
+            // Clamp rotation to avoid turning the camera all the way behind the player
             currentCameraRotationX = Mathf.Clamp(
                 currentCameraRotationX,
                 -CAMERA_ROTATION_LIMIT,
@@ -45,6 +50,7 @@ public class PlayerMotor : MonoBehaviour {
         }
     }
 
+    // Public methods to set the expected movement change for the next physics frame
     public void Move(Vector3 velocity) {
         this.velocity = velocity;
     }
