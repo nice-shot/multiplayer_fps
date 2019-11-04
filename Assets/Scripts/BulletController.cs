@@ -27,7 +27,7 @@ public class BulletController : NetworkBehaviour {
     private const string DESTRUCTIBLE_TAG = "Destructible";
 
     // For roundtrip calculations
-    private float collisionStartTime;
+    private float roundtripTimer;
 
     void Awake() {
         // Immediately gives the bullet speed on creation
@@ -48,7 +48,7 @@ public class BulletController : NetworkBehaviour {
     void OnCollisionEnter(Collision collision) {
         // Player who shot the bullet is responsible for physics calculation
         if (hasAuthority) {
-            collisionStartTime = Time.time;
+            roundtripTimer = Time.time;
             // Send explosion information to the server
             CmdAnnounceExplosion(transform.position);
 
@@ -87,7 +87,7 @@ public class BulletController : NetworkBehaviour {
     private void RpcPlaceExplosion(Vector3 position) {
         if (hasAuthority) {
             // Calculate roundtrip since the explosion command was sent
-            GameManager.instance.roundtripCalculator.CalculateRoundtrip(collisionStartTime, Time.time);
+            GameManager.instance.roundtripCalculator.CalculateRoundtrip(roundtripTimer, Time.time);
         } else {
             // Play the explosion for all clients except the shooting player
             CreateExplosion(position);

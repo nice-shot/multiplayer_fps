@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// In charge of handling input and activating the different components accordingly
+/// </summary>
 [RequireComponent(typeof(PlayerMotor), typeof(PlayerShoot))]
 public class PlayerController : MonoBehaviour {
-
     public float speed;
     public float lookSenstivity;
 
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Start() {
+        // Create the UI and make sure where unpaused
         ui = Instantiate(playerUIPrefab);
         Unpause();
     }
@@ -33,6 +37,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        // Handle pausing
         if (Input.GetButtonDown("Cancel")) {
             if (paused) {
                 Unpause();
@@ -82,6 +87,7 @@ public class PlayerController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         ui.SetPauseMenu(true);
+        // Stop all movement when paused
         motor.Move(Vector3.zero);
         motor.Rotate(Vector3.zero);
         motor.RotateCamera(0f);
