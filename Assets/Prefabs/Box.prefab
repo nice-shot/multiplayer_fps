@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4621018576927183728}
+  - component: {fileID: 3202809062772135380}
   - component: {fileID: 4429889839088200006}
   - component: {fileID: 7946223575713519039}
   - component: {fileID: 3521260957895879293}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Box
-  m_TagString: Destructible
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,6 +34,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &3202809062772135380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8537274794527105379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56fd8b205177ce243860440056c35740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brokenPrefab: {fileID: 2295692881959564793, guid: 05ab2a8b0e6e9b34caed691cbbc04ee1,
+    type: 3}
 --- !u!33 &4429889839088200006
 MeshFilter:
   m_ObjectHideFlags: 0
