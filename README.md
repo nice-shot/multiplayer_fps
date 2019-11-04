@@ -9,4 +9,12 @@ To create the server run the game and click `LAN Server Only` on the top left me
 
 To connect to the running server, run the game, enter the server's ip and click `LAN Client`.
 
+Controls
+--------
+* Move with the arrows or WASD
+* Turn with the mouse
+* ESC key to pause. This will show the cursor and    allow you to disconnect or quit
+
+Game window can be resized
+
 Have fun!
