@@ -11,8 +11,8 @@ public class Player : NetworkBehaviour {
         hitsTaken = 0;
     }
 
+    // Update the player status on the GUI
     public void OnChangeHits(int hits) {
-        print("Hits have changed to " + hits + " from " + hitsTaken);
         GameManager.instance.UpdatePlayerStatus(name, hits);
     }
 }

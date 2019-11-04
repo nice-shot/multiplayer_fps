@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BulletController : NetworkBehaviour {
-    public float initialSpeed;
+    public float speed;
     public float lifespan;
     public float explosionRadius;
     public float explosionForce;
@@ -14,7 +14,9 @@ public class BulletController : NetworkBehaviour {
     public LayerMask breakableLayerMask;
     public LayerMask movableLayerMask;
 
+    // Used to sync between a localy created bullet and a network bullet
     [SyncVar]
+    [HideInInspector]
     public int localId;
 
     [HideInInspector]
@@ -25,48 +27,46 @@ public class BulletController : NetworkBehaviour {
     private const string DESTRUCTIBLE_TAG = "Destructible";
 
     void Awake() {
+        // Immediately gives the bullet speed on creation
         rb = GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * initialSpeed;
+        rb.velocity = transform.forward * speed;
 
         creationTime = Time.time;
     }
 
     void Update() {
         if (Time.time - creationTime > lifespan) {
-            ShowExplosion(transform.position);
+            // Explode the bullet when it's lifetime ends
+            CreateExplosion(transform.position);
             Destroy(gameObject);
         }
     }
 
     void OnCollisionEnter(Collision collision) {
-        // Local player sends the details to the server
+        // Player who shot the bullet is responsible for physics calculation
         if (hasAuthority) {
-            print("Bullet hit: " + collision.gameObject.name);
             // Send explosion information to the server
             CmdAnnounceExplosion(transform.position);
 
             // Mark player hit
             if (collision.gameObject.CompareTag(PLAYER_TAG)) {
-                print("Hit another player");
                 CmdHitPlayer(collision.gameObject.name);
             }
 
             // Play explosion for local player
-            ShowExplosion(transform.position);
+            CreateExplosion(transform.position);
         }
-
-        // Maybe add double checking of collision on the server side
-        // if (isServer) {
-        // }
     }
 
     [Command]
     private void CmdAnnounceExplosion(Vector3 position) {
-        print("Bullet exploded!");
+        // Tell cliens to play explosion
         RpcPlaceExplosion(position);
-        // Show explosion on the server
-        ShowExplosion(position);
-        Destroy(gameObject);
+        // Play the explosion on the server as well - don't play if server is also client
+        if (!isClient) {
+            CreateExplosion(position);
+            Destroy(gameObject);
+        }
     }
 
     [Command]
@@ -82,12 +82,12 @@ public class BulletController : NetworkBehaviour {
     [ClientRpc]
     private void RpcPlaceExplosion(Vector3 position) {
         if (!hasAuthority) {
-            ShowExplosion(position);
+            CreateExplosion(position);
         }
         Destroy(gameObject);
     }
 
-    private void ShowExplosion(Vector3 position) {
+    private void CreateExplosion(Vector3 position) {
         Instantiate(explosionEffect, position, Quaternion.identity);
 
         // Brake objects in the explosion radius
