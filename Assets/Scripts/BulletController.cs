@@ -26,6 +26,9 @@ public class BulletController : NetworkBehaviour {
     private const string PLAYER_TAG = "Player";
     private const string DESTRUCTIBLE_TAG = "Destructible";
 
+    // For roundtrip calculations
+    private float collisionStartTime;
+
     void Awake() {
         // Immediately gives the bullet speed on creation
         rb = GetComponent<Rigidbody>();
@@ -45,6 +48,7 @@ public class BulletController : NetworkBehaviour {
     void OnCollisionEnter(Collision collision) {
         // Player who shot the bullet is responsible for physics calculation
         if (hasAuthority) {
+            collisionStartTime = Time.time;
             // Send explosion information to the server
             CmdAnnounceExplosion(transform.position);
 
@@ -60,20 +64,20 @@ public class BulletController : NetworkBehaviour {
 
     [Command]
     private void CmdAnnounceExplosion(Vector3 position) {
-        // Tell cliens to play explosion
+        // Tell clients to play explosion
         RpcPlaceExplosion(position);
-        // Play the explosion on the server as well - don't play if server is also client
+        // Play the explosion on the server as well - don't play if server is also a client
         if (!isClient) {
             CreateExplosion(position);
             Destroy(gameObject);
         }
     }
 
+    // Update the hits score - currently no logic for death
     [Command]
     private void CmdHitPlayer(string playerId) {
-        print("Another player was hit - marking it down");
         Player player = GameManager.instance.GetPlayer(playerId);
-        print("Updating hits for player: " + player + " to" + (player.hitsTaken + 1));
+        // SyncVar so it will update on all the clients
         player.hitsTaken += 1;
         // The hook doesn't happen on the server so apply this manually
         player.OnChangeHits(player.hitsTaken);
@@ -81,13 +85,18 @@ public class BulletController : NetworkBehaviour {
 
     [ClientRpc]
     private void RpcPlaceExplosion(Vector3 position) {
-        if (!hasAuthority) {
+        if (hasAuthority) {
+            // Calculate roundtrip since the explosion command was sent
+            GameManager.instance.roundtripCalculator.CalculateRoundtrip(collisionStartTime, Time.time);
+        } else {
+            // Play the explosion for all clients except the shooting player
             CreateExplosion(position);
         }
         Destroy(gameObject);
     }
 
     private void CreateExplosion(Vector3 position) {
+        // Show explosion effect - TODO: Add sound
         Instantiate(explosionEffect, position, Quaternion.identity);
 
         // Brake objects in the explosion radius
@@ -111,7 +120,6 @@ public class BulletController : NetworkBehaviour {
     }
 
     override public void OnStartAuthority() {
-        print("I got authority for player: " + PlayerSetup.localPlayer);
         PlayerSetup.localPlayer.GetComponent<PlayerShoot>().ReplaceLocalBulletWithNetwork(this);
     }
 

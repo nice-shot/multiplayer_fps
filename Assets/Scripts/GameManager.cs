@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(RoundtripCalculator))]
 public class GameManager : MonoBehaviour {
 
     // UI
@@ -10,11 +11,17 @@ public class GameManager : MonoBehaviour {
     public UIPlayerInfoController playerInfoControllerPrefab;
 
     public static GameManager instance;
+    // Reference to allow easy access to calculator
+    public RoundtripCalculator roundtripCalculator;
 
     private const string PLAYER_ID_PREFIX = "Player ";
 
     private Dictionary<string, Player> players = new Dictionary<string, Player>();
     private Dictionary<string, UIPlayerInfoController> infoControllers = new Dictionary<string, UIPlayerInfoController>();
+
+    void Awake() {
+        roundtripCalculator = GetComponent<RoundtripCalculator>();
+    }
 
     void Start() {
         if (instance != null) {
