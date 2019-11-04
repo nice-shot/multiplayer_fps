@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public UIPlayerInfoController playerInfoControllerPrefab;
 
     public static GameManager instance;
+
     // Reference to allow easy access to calculator
     public RoundtripCalculator roundtripCalculator;
 
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
+        // Singleton pattern
         if (instance != null) {
             Destroy(gameObject);
         }
@@ -32,21 +34,24 @@ public class GameManager : MonoBehaviour {
     }
 
     public void RegisterPlayer(uint netId, Player player) {
+        // Keep track of all players using their name
         string playerId = PLAYER_ID_PREFIX + netId;
         players.Add(playerId, player);
         player.transform.name = playerId;
 
-        // Show in UI
+        // Show player information in UI
         UIPlayerInfoController infoController = Instantiate(
             playerInfoControllerPrefab,
             playerInfoList
         );
 
         infoController.SetInfo(playerId, player.hitsTaken);
+        // Keep track of the player status UI
         infoControllers.Add(playerId, infoController);
     }
 
     public void UnregisterPlayer(string playerId) {
+        // Stop tracking player and remove status UI
         players.Remove(playerId);
         UIPlayerInfoController infoController = infoControllers[playerId];
         infoControllers.Remove(playerId);
@@ -61,11 +66,9 @@ public class GameManager : MonoBehaviour {
 
     public void UpdatePlayerStatus(string playerId, int hits) {
         if (!players.ContainsKey(playerId)) {
-            // Probably not registered yet
+            // Player not registered yet - might be bug
             return;
         }
-        print("Manager updating player info - " + playerId);
-        Player player = GetPlayer(playerId);
         infoControllers[playerId].SetInfo(playerId, hits);
     }
 }
